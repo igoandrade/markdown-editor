@@ -1,4 +1,4 @@
-# Minimal Markdown Editor application
+# Minimal Markdown Editor Application
 ***
 
 ## Topics:
