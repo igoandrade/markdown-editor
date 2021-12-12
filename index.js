@@ -3,7 +3,6 @@ const { autoUpdater } = require('electron-updater');
 
 const menu = require('./menu');
 
-
 let window;
 
 app.on('ready', () => {
@@ -16,6 +15,7 @@ app.on('ready', () => {
             enableRemoteModule: false
         }
     });
+
     window.loadFile('index.html');
     autoUpdater.checkForUpdatesAndNotify();
 });
