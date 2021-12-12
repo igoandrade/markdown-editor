@@ -1,0 +1,36 @@
+{
+  "name": "proj02-markdown-editor",
+  "version": "1.0.0",
+  "description": "Minimal Markdown Editor App",
+  "main": "index.js",
+  "scripts": {
+    "start": "set DEBUG=true & electron .",
+    "build:windows": "electron-builder --windows",
+    "publish:github": "electron-builder --win -p always",
+    "build:macos": "electron-builder --macos --dir"
+  },
+  "build": {
+    "appId": "com.my.markdown-editor",
+    "publish": {
+      "provider": "github",
+      "owner": "igoandrade",
+      "repo": "markdown-editor"
+    }
+  },
+  "keywords": [
+    "Markdown Editor",
+    "Electron JS",
+    "Application"
+  ],
+  "author": "Igo da Costa Andrade",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^16.0.4",
+    "electron-builder": "^22.14.5"
+  },
+  "dependencies": {
+    "electron-dialog-external": "^1.0.1",
+    "electron-updater": "^4.6.1",
+    "simplemde": "^1.11.2"
+  }
+}

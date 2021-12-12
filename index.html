@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./node_modules/simplemde/dist/simplemde.min.css">
+    <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
+    <title>Markdown Editor</title>
+</head>
+
+<body ondrop="dropHandler(event);">
+    <textarea id="editor"></textarea>
+
+
+    <script type="text/javascript">
+        let editor = new SimpleMDE({ element: document.querySelector('#editor') });
+
+        const { ipcRenderer } = require('electron');
+
+        ipcRenderer.on('editor-event', (event, arg) => {
+            console.log(arg);
+            event.sender.send('editor-reply', `Received ${arg}`);
+            if (arg === 'toggle-bold') editor.toggleBold();
+            if (arg === 'toggle-italic') editor.toggleItalic();
+            if (arg === 'toggle-strikethrough') editor.toggleStrikethrough();
+            if (arg === 'save') event.sender.send('save', editor.value());
+
+        });
+
+        ipcRenderer.on('load', (event, content) => {
+            if (content) {
+                // do something with content
+                editor.value(content);
+            }
+        });
+        ipcRenderer.send('editor-reply', 'Page Loaded');
+
+        function dropHandler(event) {
+            console.log('Files(s) dropped');
+            event.preventDafault;
+            //console.log("log: " + event.dataTransfer.items[0].kind)
+            if (event.dataTransfer.items) {
+
+                if (event.dataTransfer.items[0].kind === 'file') {
+                    var data = event.dataTransfer.items;
+                    console.log(data[0]);
+                    var file = event.dataTransfer.items[0].getAsFile();
+                    var arrayName = file.name.split('.');
+                    var name = arrayName.slice(0,-1).join('.');
+                    var extension = arrayName[arrayName.length - 1];
+                    if (file.type === 'text/markdown' || extension === 'md'){
+                        var reader = new FileReader();
+                        reader.onload = e => {
+                            //console.log(e.target.result);
+                            editor.codemirror.setValue(e.target.result);
+                            //document.querySelector('title').innerText = `${name} - Markdown Editor`;
+                        };
+                        reader.readAsText(file);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
