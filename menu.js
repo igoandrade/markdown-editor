@@ -13,7 +13,7 @@ const {
 const path = require('path');
 const fs = require('fs');
 
-var name;
+const isMac = process.platform === 'darwin'
 
 const fileMenu = {
     label: 'File',
@@ -31,7 +31,13 @@ const fileMenu = {
             click() {
                 saveFile();
             }
+        },
+        {
+            label: 'Exit',
+            role: isMac ?  'close' : 'quit' ,
+            accelerator: 'CommandOrControl + Q'
         }
+        
     ]
 };
 
@@ -77,6 +83,10 @@ const formatMenu = {
 const helpMenu = {
     role: 'help',
     submenu: [
+        { 
+            label: `About Markdown Editor`,
+            role: 'about' 
+        },
         {
             label: 'About Editor Component',
             click() {
